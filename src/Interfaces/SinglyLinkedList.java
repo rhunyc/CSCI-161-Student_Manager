@@ -1,0 +1,173 @@
+package Interfaces;
+
+import java.io.Serializable;
+
+
+
+/**
+ *
+ * @author Zachary Anderson
+ */
+class SinglyLinkedList<E> implements Serializable 
+{
+    protected static class Node<E> implements Serializable
+    {
+        protected E element;
+        protected Node<E> next;
+        
+        public Node(E e, Node<E> n)
+        {
+            element = e;
+            next = n;
+        }
+        
+        /**
+         * 
+         * @return returns the element in the node
+         */
+        public E getElement()
+        {
+            return element;
+        }
+        
+        /**
+         * 
+         * @return returns the node that is store in the next pointer
+         */
+        public Node<E> getNext()
+        {
+            return next;
+        }
+        
+        /**
+         * 
+         * @param n any node 
+         */
+        public void setNext(Node<E> n)
+        {
+            next = n;
+        }
+    }
+    
+    protected Node<E> head = null;
+    protected Node<E> tail = null;
+    protected int size = 0;
+    
+    
+    public SinglyLinkedList()
+    {
+        
+    }
+    
+    /**
+     * 
+     * @return the size of the list
+     */
+    public int size()
+    {
+        return size;
+    }
+    
+    /**
+     * 
+     * @return a boolean indicating if the list is empty
+     */
+    public boolean isEmpty()
+    {
+        return size ==0;
+    }
+    
+    /**
+     * 
+     * @return the element in the first "index" or node
+     */
+    public E first()
+    {
+        if(isEmpty())
+            return null;
+        return head.getElement();
+    }
+    
+    /**
+     * 
+     * @return the element in the last "index" or node
+     */
+    public E last()
+    {
+        if(isEmpty())
+            return null;
+        return tail.getElement();
+    }
+    
+    /**
+     * 
+     * @param e any element to be stored in the head
+     */
+    public void addFirst(E e)
+    {
+        head = new Node<>(e,head);
+        if(size == 0)
+            tail = head;
+        size++;
+    }
+    
+    /**
+     * 
+     * @param e any element to be stored as the tail
+     */
+    public void addLast(E e)
+    {
+        Node<E> toAdd = new Node<>(e,null);
+        if(isEmpty())
+            head = toAdd;
+        else
+            tail.setNext(toAdd);
+        tail = toAdd;
+        size++;
+    }
+    
+    /**
+     * 
+     * @return the element in the head and remove that element setting the next node as the head
+     */
+    public E removeFirst()
+    {
+        if(isEmpty())
+            return null;
+        E result = head.getElement();
+        head = head.getNext();
+        size--;
+        if(size == 0)
+            tail = null;
+        return result;
+    }
+    
+    public boolean hasNext(Node<E> n)
+    {
+        return n.getNext() != null;
+    }
+    
+    public E removeLast()
+    {
+        if(isEmpty())
+            return null;
+        E result = tail.getElement();
+        
+        Node<E> current = head;
+        Node<E> previous = null;
+        
+        while(!(current == tail))
+        {
+            previous = current;
+            current = current.getNext();
+        }
+        
+        tail = previous;
+        tail.setNext(null);
+        
+        size--;
+        if(size == 0)
+            head = null;
+        return result;
+    }
+}
