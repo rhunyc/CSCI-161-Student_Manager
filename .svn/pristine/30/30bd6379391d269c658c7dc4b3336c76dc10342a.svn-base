@@ -1,0 +1,72 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Factories;
+
+import Classes.Course;
+import Classes.Student;
+import Interfaces.User;
+import java.util.ArrayList;
+import java.util.Random;
+
+/**
+ *
+ * @author zachary.d.anderson
+ */
+public class StudentFactory {
+
+//    String name, double gpa, ArrayList<Course> compCourses, int totalCredits, int creditsNeeded, String major
+    static String[] fNames = {"Dorcas ", "Doreen ", "Shela ", "Emmanuel ", "David ", "Lory ", "Elma ", "Rayford ", "Micheal ", "Adrian "};
+    static String[] lNames = {"Stansberry", "Back", "Popham", "Gammage", "Liddell", "Bowman", "Bosque", "Evangelista", "Giunta", "Coil"};
+    static String[] majors = {"Gender Studies", "Art or whatever", "Bussiness cause every school has to", "MATH", "PHY ed"};
+    static Random rand = new Random();
+    static ArrayList<Course> compCourses = null;
+    
+    public static Student generateStudent() {
+        int totalCredits = rand.nextInt(60) + 41;
+        double GPA = (double) rand.nextInt((3) + 1);
+        int creditsNeeded = 0;
+        String major = majors[rand.nextInt(majors.length)];
+        switch (major) {
+            case "Gender Studies":
+                creditsNeeded = 116;
+                break;
+            case "Art or whatever":
+                creditsNeeded = 114;
+                break;
+            case "Bussiness cause every school has to":
+                creditsNeeded = 90;
+                break;
+            case "MATH":
+                creditsNeeded = 145;
+                break;
+            case "PHY ed":
+                creditsNeeded = 102;
+                break;
+        }
+        String fName = fNames[rand.nextInt(fNames.length)];
+        String lName = lNames[rand.nextInt(lNames.length)];
+        String name = fName + lName;
+        Student stu = new Student(name, GPA, compCourses, totalCredits, creditsNeeded, major);
+        return stu;
+    }
+    
+
+    public static ArrayList<Student> generateArrayListStudents(int n)
+
+    
+    {
+
+        ArrayList<Student> students = new ArrayList<>();
+
+        for(int x = 0; x < n; x++)
+        {
+            students.add(generateStudent());
+        }
+        
+        return students;
+    }
+
+}

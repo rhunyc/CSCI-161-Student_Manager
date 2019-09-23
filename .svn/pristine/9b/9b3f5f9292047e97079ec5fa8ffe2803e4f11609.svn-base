@@ -1,0 +1,89 @@
+package Classes;
+
+import Interfaces.User;
+import java.util.ArrayList;
+
+public class Administrator implements User {
+
+    private String name;
+
+    private int security;
+
+    public Administrator(String name){
+        this.name = name;
+        this.security = 3;
+    }
+    
+    public User createUser(int x) {
+        int typeOfStudent = 0;
+        switch(x)
+        {
+            case 1:
+//                typeOfStudent; needs code to enter the variable from GUI
+                //intitalizing variables to gather in the switch statement below
+                double GPA;
+                ArrayList<Course> courses;
+                int totalCredits;
+                String minor;
+                Student stu;
+                //These variables may be gathered at this point in the code
+                String nameS;
+                int creditsNeeded;
+                String major;
+                    switch(typeOfStudent){
+                        case 1:
+                            //we need to get a list of completed courses somehow
+//                            GPA = 
+//                            totalCredits =
+//                            stu = new Student(nameS, GPA, compCourses, totalCredits, creditsNeeded, major)
+//                            return stu;
+                        case 2:
+                            //completed courses from this block as well
+//                            GPA = 
+//                            totalCredits =
+//                            minor = 
+//                            stu = new Student(nameS, GPA, courses, totalCredits, creditsNeeded, major, minor);
+//                            return stu;
+                        case 3:
+                            
+//                            stu = new Student(nameS, creditsNeeded, major);
+//                            return stu;
+                        case 4:
+//                            minor =
+//                            stu = new Student(nameS, creditsNeeded, major, minor);
+//                            return stu;
+                        default:
+                            //print unrecognized input
+                            return null;
+                    }
+                
+                
+            case 2:
+//                String nameF;
+//                String prefix;
+//                Faculty fac = new Faculty(nameF, prefix);
+//                return fac;
+            case 3:
+//                String nameA;
+//                Administrator admin = new Administrator(nameA);
+//                return admin;
+            default:
+                //print unrecognized input 
+                return null;
+        }
+        
+    }
+
+    public void deleteUser(User u) {
+    }
+
+    @Override
+    public int getSecurityLevel() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getName() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+}

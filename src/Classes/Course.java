@@ -3,43 +3,35 @@ package Classes;
 import Interfaces.LinkedQueue;
 import Interfaces.Queue;
 import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 
-public class Course implements  Comparable<Course>, Serializable {
+public class Course implements Comparable<Course>, Serializable {
 
-    private int[] days;
-
+    private String[] days;
     private int time;
-
     private String name;
-
     private String major;
-
-    private ArrayList<Course> prereq = new ArrayList<>();
-
-    private Queue<Student> waitList = new LinkedQueue<>();
-
+    private LinkedQueue<Student> waitList = new LinkedQueue<>();
     private int capacity;
-
     private String teacher; //do we want this?
-
     private ArrayList<Student> enrolled = new ArrayList<>();
-
     private int credits;
-
     private int courseID;
-
     private ArrayList<Integer> IDS = new ArrayList<>();
+    private static int lookupHelper;
 
-    public Course(String name, int[] days, int time, String major, ArrayList<Course> prereq, int capacity, String teacher, int credits) {
+    ;
+
+    public Course(String name, String[] days, int time, String major, int capacity, String teacher, int credits) {
         this.name = name;
         this.days = days;
         this.time = time;
         this.major = major;
-        this.prereq = prereq;
         this.capacity = capacity;
         this.teacher = teacher;
         this.credits = credits;
@@ -62,25 +54,85 @@ public class Course implements  Comparable<Course>, Serializable {
         return newID;
     }
 
+    public static boolean lookup(int id) {
+        System.out.println("ID to check: " + id);
+        if (Administrator.studentMaster.isEmpty()) {
+            return false;
+        }
+
+        for (int x = 0; x < Administrator.courseMaster.size(); x++) {
+            if (id == Administrator.courseMaster.get(x).getCourseID()) {
+                lookupHelper = x;
+                System.out.println("Found match with id: " + Administrator.courseMaster.get(x).getCourseID());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static Course iDFinder() {
+        return Administrator.courseMaster.get(lookupHelper);
+    }
+
     public boolean isFull() {
-        return enrolled.size() == capacity;
+        return enrolled.size() >= capacity;
 
     }
 
-    public void addStudent(Student s) {
+    public boolean addStudent(Student s) {
         if (isFull()) {
             addStudentWait(s);
+            return false;
+        } else {
+            enrolled.add(s);
+            return true;
         }
-        enrolled.add(s);
     }
 
     public void addStudentWait(Student s) {
         waitList.enqueue(s);
     }
 
+    /**
+     * this method seems a little dangerous as is. there is a check if the list
+     * integrity is compromised but will leave as is for now
+     *
+     * @param s
+     */
+    @SuppressWarnings("empty-statement")
+    public void removeStudentWait(Student s) {
+        //tester variables to verify waitList integrity
+        LinkedQueue<Student> temp = waitList;
+        int waitSize = waitList.size();
+
+        ArrayList<Student> waiters = new ArrayList<>();
+        while (!waitList.isEmpty());
+        {
+            waiters.add(waitList.dequeue());//this for loop could compromise the integrity of the waitList
+        }
+        waiters.remove(s);
+        for (Student x : waiters) {
+            waitList.enqueue(x);
+        }
+
+        //If statement to verify waitList integerity
+        if (waitList.size() != (waitSize - 1)) {
+            System.out.println("Something went wrong waitlist integrity compromised");
+        }
+    }
+
     public void checkWaitList() {
-        if (!isFull() && !waitList.isEmpty()) {
+        while (!isFull() && !waitList.isEmpty()) {
             enrolled.add(waitList.dequeue());
+        }
+    }
+
+    public void CLEARSTUDENTS() {
+        for (Student s : enrolled) {
+            removeStudent(s);
+        }
+        while (!waitList.isEmpty()) {
+            waitList.dequeue().removeCourse(this);
         }
     }
 
@@ -92,11 +144,31 @@ public class Course implements  Comparable<Course>, Serializable {
         }
     }
 
+    public String printDays() {
+        String toReturn = "";
+
+        for (String s : days) {
+            toReturn += ", " + s;
+        }
+        toReturn = toReturn.substring(2);
+        return toReturn;
+    }
+
+    public String printTime() {
+        String timeString = time + "";
+        if (timeString.length() <= 3) {
+            timeString = "0" + timeString;
+        }
+        char[] timeChar = timeString.toCharArray();
+        String formattedTime = timeChar[0] + "" + timeChar[1] + ":" + timeChar[2] + "" + timeChar[3];
+        return formattedTime;
+    }
+
     @Override
     public String toString() {
-        return name + ", Instructor: " + teacher;
+        return courseID + " " + name + ", Instructor: " + teacher;
     }
-    
+
     public String toStringlong() {
         return "Course{" + "time=" + time + ", name=" + name + ", major=" + major + ", capacity=" + capacity + ", teacher=" + teacher + ", credits=" + credits + ", courseID=" + courseID + '}';
     }
@@ -105,8 +177,6 @@ public class Course implements  Comparable<Course>, Serializable {
     public int compareTo(Course c) {
         return ((this.getCourseID() < c.getCourseID()) ? -1 : (this.getCourseID() == c.getCourseID() ? 0 : 1));
     }
-
-    
 
     @Override
     public boolean equals(Object obj) {
@@ -144,9 +214,6 @@ public class Course implements  Comparable<Course>, Serializable {
         if (!Arrays.equals(this.days, other.days)) {
             return false;
         }
-        if (!Objects.equals(this.prereq, other.prereq)) {
-            return false;
-        }
         if (!Objects.equals(this.waitList, other.waitList)) {
             return false;
         }
@@ -156,13 +223,15 @@ public class Course implements  Comparable<Course>, Serializable {
         return true;
     }
 
-    
-    
-    public int[] getDays() {
+    public LinkedQueue<Student> getWaitList() {
+        return waitList;
+    }
+
+    public String[] getDays() {
         return days;
     }
 
-    public void setDays(int[] days) {
+    public void setDays(String[] days) {
         this.days = days;
     }
 
@@ -188,14 +257,6 @@ public class Course implements  Comparable<Course>, Serializable {
 
     public void setMajor(String major) {
         this.major = major;
-    }
-
-    public ArrayList<Course> getPrereq() {
-        return prereq;
-    }
-
-    public void setPrereq(ArrayList<Course> Prereq) {
-        this.prereq = Prereq;
     }
 
     public int getCapacity() {

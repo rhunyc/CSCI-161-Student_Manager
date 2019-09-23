@@ -1,0 +1,184 @@
+package Classes;
+
+import Interfaces.Queue;
+import java.util.ArrayList;
+
+
+public class Course {
+
+    private int[] days;
+
+    private int time;
+
+    private String name;
+
+    private String major;
+
+    private String minor;
+
+    private ArrayList<Course> Prereq;
+
+    private Queue<Student> waitList;
+
+    private int capacity;
+
+    private String[] materialsNeeded;
+
+    private int semester;
+
+    private Faculty teacher;
+
+    private ArrayList<Student> enrolled;
+
+    private int credits;
+
+    private int courseID;
+
+    private String location;
+
+    public Course(String name, int[] days, int time, String major, String minor, ArrayList<Course> Prereq, int Capacity, String[] materialsNeeded, int semester, Faculty teacher, ArrayList<Student> enrolled, int credits, int courseID, String location) {
+        this.name = name;
+        this.days = days;
+        this.time = time;
+        this.major = major;
+        this.minor = minor;
+        this.Prereq = Prereq;
+        this.capacity = Capacity;
+        this.materialsNeeded = materialsNeeded;
+        this.semester = semester;
+        this.teacher = teacher;
+        this.enrolled = enrolled;
+        this.credits = credits;
+        this.courseID = courseID;
+        this.location = location;
+    }
+
+    
+    
+    public int[] getDay() {
+        return days;
+    }
+
+    public void setDay(int[] days) {
+        this.days = days;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getMajor() {
+        return major;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
+    }
+
+    public String getMinor() {
+        return minor;
+    }
+
+    public void setMinor(String minor) {
+        this.minor = minor;
+    }
+
+    public ArrayList<Course> getPrereq() {
+        return Prereq;
+    }
+
+    public void setPrereq(ArrayList<Course> Prereq) {
+        this.Prereq = Prereq;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int Capacity) {
+        this.capacity = Capacity;
+    }
+
+    public String[] getMaterialsNeeded() {
+        return materialsNeeded;
+    }
+
+    public void setMaterialsNeeded(String[] materialsNeeded) {
+        this.materialsNeeded = materialsNeeded;
+    }
+
+    public int getSemester() {
+        return semester;
+    }
+
+    public void setSemester(int semester) {
+        this.semester = semester;
+    }
+
+    public Faculty getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Faculty teacher) {
+        this.teacher = teacher;
+    }
+
+    public ArrayList<Student> getEnrolled() {
+        return enrolled;
+    }
+
+    public void setEnrolled(ArrayList<Student> enrolled) {
+        this.enrolled = enrolled;
+    }
+
+    public int getCredits() {
+        return credits;
+    }
+
+    public void setCredits(int credits) {
+        this.credits = credits;
+    }
+
+    public int getCourseID() {
+        return courseID;
+    }
+
+    public void setCourseID(int courseID) {
+        this.courseID = courseID;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+    
+    
+    
+    
+
+    public boolean isFull() {
+        return enrolled.size() == capacity;
+           
+    }
+
+    public void addStudent(Student s) {
+    }
+
+    public void addStudentWait() {
+    }
+}

@@ -1,0 +1,8 @@
+package Interfaces;
+
+public interface User {
+
+    public int getSecurityLevel();
+
+    public String getName();
+}

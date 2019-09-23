@@ -1,0 +1,49 @@
+package Classes;
+
+import Interfaces.Queue;
+import Interfaces.User;
+import java.util.ArrayList;
+
+public class Faculty implements User {
+
+    private String name;
+
+    private int security;
+
+    private ArrayList<Course> teaching;
+
+    private String prefix;
+
+    public Faculty(String name, String prefix) {
+        this.name = name;
+        this.prefix = prefix;
+        this.security = 2;
+        Administrator.userMaster.add(this);
+    }
+
+    
+    
+    public void addCourse(Course c) {
+    }
+
+    public void removeCourse(Course c) {
+    }
+
+    public Queue students(Course c) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public String levelUp() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int getSecurityLevel() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getName() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+}

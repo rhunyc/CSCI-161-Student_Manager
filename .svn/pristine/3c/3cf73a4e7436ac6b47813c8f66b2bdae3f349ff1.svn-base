@@ -1,0 +1,47 @@
+package Classes;
+
+import java.util.ArrayList;
+
+
+public class Course {
+
+    private int day;
+
+    private int time;
+
+    private String name;
+
+    private String major;
+
+    private String minor;
+
+    private ArrayList<Course> Prereq;
+
+    private LinkedQueue<Student> waitList;
+
+    private int Capacity;
+
+    private String[] materialsNeeded;
+
+    private int semester;
+
+    private Faculty teacher;
+
+    private ArrayList<Student> enrolled;
+
+    private int credits;
+
+    private int courseID;
+
+    private String location;
+
+    public boolean isFull() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void addStudent() {
+    }
+
+    public void addStudentWait() {
+    }
+}

@@ -1,0 +1,94 @@
+package Classes;
+
+import Interfaces.User;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class Administrator implements User, Serializable {
+
+    private String name;
+    private int security;
+    protected static ArrayList<User> userMaster = new ArrayList<>();
+    protected static ArrayList<Student> studentMaster = new ArrayList<>();
+    protected static ArrayList<Course> courseMaster = new ArrayList<>();
+    
+    public Administrator(String name) {
+        this.name = name;
+        this.security = 3;
+        userMaster.add(this);
+    }
+    
+    public static ArrayList<Student> enrolledList(Course c){
+        return c.getEnrolled();
+    }
+
+    public static void CLEARSTUDENT() {
+        for (Student s : studentMaster) {
+            s.CLEARCOURSES();
+        }
+        studentMaster.clear();
+    }
+
+    public static void CLEARCOURSE() {
+        ArrayList<Student> temp = new ArrayList<>();
+        for (Course c : courseMaster) {
+            for(Student s : c.getEnrolled())
+            {
+                temp.add(s);
+            }
+        }
+        
+        for(Student s : temp)
+        {
+            s.adminClearCourses();
+        }
+        
+        courseMaster.clear();
+    }
+
+    public static void CLEARMASTER() {
+        userMaster.clear();
+    }
+
+    public static ArrayList<User> accessMaster() {
+        return userMaster;
+    }
+
+    public static ArrayList<Student> accessStudent() {
+        Collections.sort(studentMaster);
+        return studentMaster;
+    }
+
+    public static ArrayList<Course> accessCourse() {
+        Collections.sort(courseMaster);
+        return courseMaster;
+    }
+
+    public static void setCourse(ArrayList<Course> array) {
+        courseMaster = array;
+    }
+
+    public static void setStudent(ArrayList<Student> array) {
+        studentMaster = array;
+    }
+
+    public static void deleteStudent(Student u) {
+        studentMaster.remove(u);
+        u.getCourses().clear();
+    }
+
+    public static void deleteCourse(Course c) {
+        courseMaster.remove(c);
+        c.getEnrolled().clear();
+        while(!c.getWaitList().isEmpty())
+        {
+            c.getWaitList().dequeue();
+        }
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+}

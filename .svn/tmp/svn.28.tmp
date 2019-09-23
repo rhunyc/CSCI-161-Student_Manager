@@ -1,0 +1,243 @@
+package Classes;
+
+import Interfaces.User;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Random;
+
+public class Student implements User, Comparable<Student>, Serializable {
+
+    private String name;
+
+    private int id;
+
+    private double gpa;
+
+    private ArrayList<Course> courses = new ArrayList<>();
+
+    private ArrayList<Course> prospectiveCourses = new ArrayList<>();
+
+    private ArrayList<Course> compCourses = new ArrayList<>();
+
+    private int totalCredits;
+
+    private int creditsNeeded;
+
+    private String major;
+
+    private ArrayList<Integer> IDS = new ArrayList<>();
+
+    Random rand = new Random();
+
+    //Constructor for a student with a minor
+    public Student(String name, double gpa, ArrayList<Course> compCourses, int totalCredits, int creditsNeeded, String major) {
+        this.name = name;
+        this.gpa = gpa;
+        this.compCourses = compCourses;
+        this.totalCredits = totalCredits;
+        this.creditsNeeded = creditsNeeded;
+        this.major = major;
+        this.id = generateID();
+        Administrator.userMaster.add(this);
+        Administrator.studentMaster.add(this);
+    }
+
+    public int generateID() {
+        boolean isNew = false;
+        int newID = rand.nextInt((999_999 - 100_000) + 1) + 100_000;
+        while (isNew == false) {
+            if (!IDS.contains(newID)) {
+                IDS.add(newID);
+                isNew = true;
+            }
+            newID = rand.nextInt((999_999 - 100_000) + 1) + 100_000;
+        }
+        return newID;
+    }
+
+    //Helper method to be used in addCourses()
+    public boolean compareCourseTimes(Course eligableCourse) {
+        for (Course c : courses) {
+            for (int i : c.getDays()) {
+                for (int x : eligableCourse.getDays()) {
+                    if (x == i && c.getTime() == c.getTime()) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    //Helper method to be used in addCourses()
+    public boolean compareCourseEligibility(Course eligableCourse) {
+        if (eligableCourse.getPrereq().isEmpty()) {
+            return true;
+        }
+        for (Course c : compCourses) {
+            if (eligableCourse.getPrereq().contains(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Will check for eligibility of courses in shoppingCart and add the Courses
+     * to their list and print the classes not added
+     *
+     * @param shoppingCart list of Courses
+     * @return boolean whether all courses were added
+     */
+    public boolean addCourses(ArrayList<Course> shoppingCart) {
+//        unsure if we want to return void or boolean with this method depends on interaction with GUI
+        boolean allAdded = false;
+        ArrayList<Course> notAdded = new ArrayList();
+
+        for (int x = 0; x < shoppingCart.size(); x++) {
+            if (compareCourseEligibility(shoppingCart.get(x)) && compareCourseTimes(shoppingCart.get(x))) {
+                courses.add(shoppingCart.get(x));
+                shoppingCart.get(x).addStudent(this);
+            } else {
+                notAdded.add(shoppingCart.get(x));
+                allAdded = false;
+            }
+        }
+
+        if (!notAdded.isEmpty()) {
+            System.out.println("Courses not added: ");
+            for (Course c : notAdded) {
+                System.out.print(c.getName() + ", ");
+            }
+        }
+
+        return allAdded;
+    }
+
+    /**
+     * Will check if the list contains the course and remove the course, if a
+     * course is removed the wait list will be checked and updated appropriately
+     *
+     * @param c any Course object
+     * @return boolean whether the course was removed
+     */
+    public boolean removeCourse(Course c) {
+//        if (courses.isEmpty()) {
+//            System.out.println("Courses are Empty");
+//            return false;
+//        }
+        if (courses.contains(c)) {
+            c.removeStudent(this);
+            courses.remove(c);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * will clear all of the courses for the student and check the waitList for
+     * each course
+     */
+    public void clearCourses() {
+        for (Course c : courses) {
+            c.removeStudent(this);
+        }
+        courses.clear();
+    }
+    
+    public void addCourse(Course c) {
+        if (!isEnrolled(c)) {
+            c.addStudent(this);
+        }
+    }
+
+    /**
+     * Will return the number of courses the student is taking
+     *
+     * @return
+     */
+    public int numCourses() {
+        return courses.size();
+    }
+    
+    public boolean isEnrolled(Course c){
+        for (Course e : courses){
+            if (c.equals(e)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    public int getID() {
+        return id;
+    }
+
+    @Override
+    public int compareTo(Student s) {
+        return ((this.getID() < s.getID()) ? -1 : (this.getID() == s.getID() ? 0 : 1));
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + id + " Name: " + name;
+    }
+
+    /**
+     * adds course to completed courses, performs proper credits arithmetic, and
+     * removes course from current courses
+     *
+     * @param c
+     */
+    public void courseComplete(Course c) {
+        compCourses.add(c);
+        int credits = c.getCredits();
+        totalCredits += credits;
+        creditsNeeded -= credits;
+        removeCourse(c);
+    }
+
+    /*
+    Start of Getter and Setter
+     */
+    public double getGpa() {
+        return gpa;
+    }
+
+    private void setGpa(double gpa) {
+        this.gpa = gpa;
+    }
+
+    public ArrayList<Course> getCourses() {
+        return courses;
+    }
+
+    public ArrayList<Course> getProspectiveCourses() {
+        return prospectiveCourses;
+    }
+
+    public ArrayList<Course> getCompCourses() {
+        return compCourses;
+    }
+
+    public int getTotalCredits() {
+        return totalCredits;
+    }
+
+    public int getCreditsNeeded() {
+        return creditsNeeded;
+    }
+
+    public String getMajor() {
+        return major;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
+    }
+}

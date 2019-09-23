@@ -1,0 +1,129 @@
+package Classes;
+
+import Interfaces.User;
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class Student implements User, Serializable {
+
+    private String name;
+
+    private double gpa;
+
+    private int security;
+
+    private ArrayList<Course> courses;
+
+    private ArrayList<Course> prospectiveCourses;
+
+    private ArrayList<Course> compCourses;
+
+    private int totalCredits;
+
+    private int creditsNeeded;
+
+    private String major;
+
+    
+
+    //Constructor for a student with a minor
+    public Student(String name, double gpa, ArrayList<Course> compCourses, int totalCredits, int creditsNeeded, String major) {
+        this.name = name;
+        this.gpa = gpa;
+        this.compCourses = compCourses;
+        this.totalCredits = totalCredits;
+        this.creditsNeeded = creditsNeeded;
+        this.major = major;
+        
+        this.security = 1;
+        Administrator.userMaster.add(this);
+    }
+    
+    //Helper method to be used in addCourses()
+    public boolean compareCourseTimes(Course eligableCourse) {
+        for(Course c : courses)
+        {
+//            if()
+        }
+        return true; //needs to be finished
+    }
+
+    //Helper method to be used in addCourses()
+    public boolean compareCourseEligibility(Course eligableCourse) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    /**
+     * Will check for eligibility of courses in shoppingCart and add the Courses to their list and print the classes not added
+     * @param shoppingCart list of Courses
+     */
+    public void addCourses(ArrayList<Course> shoppingCart) {
+        /*
+        unsure if we want to return void or boolean with this method depends on interaction with GUI
+        boolean allAdded = true;
+        */
+        ArrayList<Course> notAdded = new ArrayList();
+        for (int x = 0; x < shoppingCart.size(); x++) {
+            if (compareCourseEligibility(shoppingCart.get(x)) && compareCourseTimes(shoppingCart.get(x))) {
+                courses.add(shoppingCart.get(x));
+                shoppingCart.get(x).addStudent(this);
+            } else {
+                notAdded.add(shoppingCart.get(x));
+//                allAdded = false;
+            }
+        }
+        if (!notAdded.isEmpty()) {
+            System.out.println("Courses not added: ");
+            for (Course c : notAdded) {
+                System.out.print(c.getName() + ", ");
+            }
+        }
+//        return allAdded;
+    }
+
+    /**
+     * Will check if the list contains the course and remove the course
+     * @param c any Course object
+     * @return boolean whether the course was removed 
+     */
+    public boolean remove(Course c) {
+//        if (courses.isEmpty()) {
+//            System.out.println("Courses are Empty");
+//            return false;
+//        }
+        if(courses.contains(c)){
+            courses.remove(c);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * will clear all of the courses for the student
+     */
+    public void clearCourses() {
+        courses.clear();
+    }
+
+    /**
+     * Will return the number of courses the student is taking
+     * @return 
+     */
+    public int numCourses() {
+        return courses.size();
+    }
+
+    @Override
+    public int getSecurityLevel() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getName() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public String toString(){
+        return name + ", Major: " + major;
+    }
+}

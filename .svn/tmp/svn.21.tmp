@@ -1,0 +1,85 @@
+package Classes;
+
+import Interfaces.User;
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class Administrator implements User, Serializable {
+
+    private String name;
+
+    private int security;
+
+    protected static ArrayList<User> userMaster = new ArrayList<>();
+    
+    protected static ArrayList<Student> studentMaster = new ArrayList<>();
+    
+    protected static ArrayList<Course> courseMaster = new ArrayList<>();
+
+    public Administrator(String name) {
+        this.name = name;
+        this.security = 3;
+        userMaster.add(this);
+    }
+    
+    public static ArrayList<User> accessMaster()
+    {
+        return userMaster;
+    }
+    
+    public static void CLEARMASTER(){
+        userMaster.clear();
+    }
+
+    public static ArrayList<Student> accessStudent()
+    {
+        return studentMaster;
+    }
+    
+    public static ArrayList<Course> accessCourse()
+    {
+        return courseMaster;
+    }
+    
+    public static void setCourse(ArrayList<Course> array){
+        courseMaster = array;
+    }
+    
+     public static void setStudent(ArrayList<Student> array){
+        studentMaster = array;
+    }
+    
+    public static void CLEARSTUDENT(){
+        studentMaster.clear();
+    }
+    
+    
+    public static void CLEARCOURSE(){
+        courseMaster.clear();
+    }
+    
+    public static void deleteStudent(Student u) {
+        for (User t : studentMaster) {
+            if (t.equals(u)) {
+                studentMaster.remove(u);
+                System.out.println("Removed " + u);
+                break;
+            }
+        }
+    }
+    
+    public static void deleteCourse(Course c){
+        for (Course t : courseMaster) {
+            if (t.equals(c)){
+                courseMaster.remove(c);
+                System.out.println("Removed " + c);
+                break;
+            }
+        }
+    }
+    
+    @Override
+    public String getName() {
+        return name;
+    }
+}
